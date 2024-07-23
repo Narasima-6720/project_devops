@@ -1,0 +1,37 @@
+Step 1: Create a VM
+
+- Create an instance on Hyperstack platform (They have a huge variety of GPU instances)
+
+OS Image - Ubuntu Server 22.04 LTS R535 CUDA 12.2
+Flavor Details - A100-80G-PCIe
+
+Step 2: Run resources on the VM
+
+- Install Ollama 
+
+curl -fsSL https://ollama.com/install.sh | sh
+
+- Run the llama3 model 
+
+ollama run llama3 
+
+Step 3:
+
+- Install Docker
+
+sudo apt update 
+sudo apt install docker.io
+sudo systemctl start docker
+sudo usermod -aG docker ubuntu
+
+- Install the nvidia driver
+
+sudo apt install -y nvidia-docker2
+sudo systemctl daemon-reload
+sudo systemctl restart docker 
+
+
+- Run the Docker container bundlede
+
+docker run -d -p 3000:8080 --gpus=all -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
+
