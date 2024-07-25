@@ -103,3 +103,10 @@ resource "aws_instance" "myins" {
     ]
   }
 }
+#execute this commands
+
+#source myenv/bin/activate
+
+#python app.py
+#application then runs
+
