@@ -46,6 +46,5 @@ vault read auth/approle/role/example-role/role-id
 #Retrieve the Secret ID:
  vault write -f auth/approle/role/example-role/secret-id
 
-#vault write -f auth/approle/role/example-role/secret-id
 
 
