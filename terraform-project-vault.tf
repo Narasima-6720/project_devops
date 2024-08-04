@@ -31,20 +31,46 @@ export VAULT_ADDR='http://127.0.0.1:8200'
 
 #Steps to Create and Apply a Policy
 
-#Save the following policy definition to a file named example-policy.hcl:
 
-path "kv/data/*" {
-  capabilities = ["read"]
+vault policy write terraform - <<EOF
+path "*" {
+  capabilities = ["list", "read"]
 }
 
-vault policy write example-policy example-policy.hcl
-vault write auth/approle/role/example-role policies=example-policy
+path "secrets/data/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+path "kv/data/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+
+path "secret/data/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+path "auth/token/create" {
+capabilities = ["create", "read", "update", "list"]
+}
+EOF
+
+#role
+
+vault write auth/approle/role/terraform \
+    secret_id_ttl=10m \
+    token_num_uses=10 \
+    token_ttl=20m \
+    token_max_ttl=30m \
+    secret_id_num_uses=40 \
+    token_policies=terraform
+
 
 #Retrieve the Role ID:
-vault read auth/approle/role/example-role/role-id
+vault read auth/approle/role/terraform/role-id
 
 #Retrieve the Secret ID:
- vault write -f auth/approle/role/example-role/secret-id
+ vault write -f auth/approle/role/terraform/secret-id
 
 
 
